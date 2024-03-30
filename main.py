@@ -4,7 +4,7 @@ from time import sleep
 
 
 game = False
-TOKEN = "6721478570:AAFbRlZQcsySyjuzbGN7ykLA2m-mol6rfaA"
+TOKEN = "TOKEN from BotFather"
 bot = TeleBot(TOKEN)
 
 
@@ -47,15 +47,6 @@ def game_start(message):
         return
     bot.send_message(message.chat.id, text='недостаточно людей!')
 
-
-@bot.message_handler(commands=['start', 'help'])
-def send_welcome(message):
-    helo = """
-Напиши - 'готов играть' для добавления в очередь
-
-/game - для старта игры
-"""
-    bot.send_message(message.chat.id, helo)
 
 
 
