@@ -7,9 +7,7 @@ import random
 def insert_player(player_id, username):
     con = sqlite3.connect("db.db")
     cur = con.cursor()
-
     sql = f"INSERT INTO players (player_id, username) VALUES ('{player_id}', '{username}')"
-    
     cur.execute(sql)
     con.commit()
     con.close()
@@ -94,8 +92,7 @@ def vote(type, username, player_id):
     con = sqlite3.connect("db.db")
     cur = con.cursor()
     cur.execute(
-        f"SELECT username FROM players WHERE player_id ="
-                    f"{player_id} AND dead = 0 AND voted = 0")
+        f"SELECT username FROM players WHERE player_id = {player_id} and dead = 0 and voted = 0")
     can_vote = cur.fetchone()
     if can_vote:  # если список не пустой, значит пользователь существует
         cur.execute(
@@ -159,3 +156,19 @@ def citizens_kill():
         con.commit()
     con.close()
     return username_killed
+
+
+
+
+def check_winner():
+    con = sqlite3.connect("db.db")
+    cur = con.cursor()
+    cur.execute("SELECT COUNT(*) FROM players WHERE role = 'mafia' and dead = 0")
+    mafia_alive = cur.fetchone()[0]
+    cur.execute(
+        "SELECT COUNT(*) FROM players WHERE role != 'mafia' and dead = 0")
+    citizens_alive = cur.fetchone()[0]
+    if mafia_alive >= citizens_alive:
+        return 'Мафия'
+    if mafia_alive == 0:
+        return 'Горожане'
